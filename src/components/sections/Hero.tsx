@@ -1,9 +1,13 @@
 "use client";
 
 import { siteConfig } from "@/config/data";
-import { User, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
+const Card3D = dynamic(() => import("@/components/3d/band/Card3D"), { ssr: false });
 
 export function Hero() {
   return (
@@ -56,19 +60,17 @@ export function Hero() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex justify-center lg:justify-end"
+            className="flex items-center justify-center w-full"
           >
-            <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            <div className="relative w-full h-[600px] lg:h-[800px] flex items-center justify-center">
               {/* Decorative Glow */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 blur-3xl rounded-full" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-blue-500/20 blur-3xl rounded-full opacity-50 scale-75" />
               
-              {/* Image Container */}
-              <div className="relative h-full w-full bg-zinc-900 border-2 border-zinc-800 rounded-3xl overflow-hidden flex flex-col items-center justify-center group shadow-2xl">
-                {/* Fallback Icon - replace with <Image /> when a real image is available */}
-                <User className="h-24 w-24 text-zinc-700 group-hover:scale-110 transition-transform duration-500" />
-                <p className="absolute bottom-6 text-xs text-zinc-500 font-mono text-center px-4">
-                  Add Profile Picture:<br />/public/profile.jpg
-                </p>
+              {/* 3D Container - Widened using viewport width to ensure the WebGL frustum never clips horizontally */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[200vw] min-w-[1500px] max-w-[4000px] h-full z-20">
+                <ErrorBoundary>
+                  <Card3D />
+                </ErrorBoundary>
               </div>
             </div>
           </motion.div>
